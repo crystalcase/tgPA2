@@ -3,6 +3,7 @@ import numpy as np
 import tensorflow.compat.v1 as tf
 from tensorflow.keras.models import load_model
 from tensorflow.python.keras.backend import set_session
+from utils import *
 
 
 tf.disable_v2_behavior()
@@ -17,7 +18,7 @@ def init():
     #model.load_weights("F:\dev\TensorflowNetworks\model\TgBier2.h5")
     session = tf.Session()
     set_session(session)
-    model = load_model("F:\dev\TensorflowNetworks\model\TgBier2.h5")
+    model = load_model("F:\dev\TensorflowNetworks\model\TgBierSum10.h5")
     graph = tf.get_default_graph()
 
 def get_parameter():
@@ -29,6 +30,7 @@ def get_parameter():
     parameters.append(float(flask.request.args.get("Wochentag")))
     print("paras", parameters)
     return parameters
+
 
 def sendResponse(raw_prediction):
     response = flask.jsonify(response = str(raw_prediction))
@@ -46,7 +48,7 @@ def predict():
     print("input", input_feature)
     with graph.as_default():
         set_session(session)
-        raw_prediction = model.predict(input_feature)[0][0]
+        raw_prediction = model.predict(input_feature)
         print("raw", raw_prediction)
     return sendResponse(raw_prediction)
 
